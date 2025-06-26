@@ -1,23 +1,16 @@
 import 'package:get/get.dart';
+import 'package:shopywell/app/data/service/auth_service.dart';
+import 'package:shopywell/app/routes/app_pages.dart';
 
 class SettingController extends GetxController {
-  //TODO: Implement SettingController
+  final AuthService _authService = Get.find<AuthService>();
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+  Future<void> logout() async {
+    try {
+      await _authService.signOut();
+      Get.offAllNamed(Routes.LOGIN);
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to logout: ${e.toString()}');
+    }
   }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }

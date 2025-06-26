@@ -1,57 +1,10 @@
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-// import 'package:shopywell/app/data/service/auth_service.dart';
-// import 'package:shopywell/app/routes/app_pages.dart';
+import 'dart:developer';
 
-// class LoginController extends GetxController {
-//   final AuthService _authService = Get.find<AuthService>();
-
-//   // Form controllers
-//   final emailController = TextEditingController();
-//   final passwordController = TextEditingController();
-
-//   // Observables
-//   final isLoading = false.obs;
-//   final isPasswordVisible = false.obs;
-
-//   @override
-//   void onClose() {
-//     emailController.dispose();
-//     passwordController.dispose();
-//     super.onClose();
-//   }
-
-//   Future<void> login() async {
-//     if (emailController.text.isEmpty || passwordController.text.isEmpty) {
-//       Get.snackbar('Error', 'Please fill in all fields');
-//       return;
-//     }
-
-//     isLoading.value = true;
-
-//     try {
-//       final result = await _authService.signIn(
-//         emailController.text.trim(),
-//         passwordController.text,
-//       );
-
-//       if (result != null) {
-//         // Login successful, navigate to home
-//         Get.offAllNamed(Routes.HOME);
-//       }
-//     } finally {
-//       isLoading.value = false;
-//     }
-//   }
-
-//   void goToSignup() {
-//     Get.toNamed(Routes.SIGNUP);
-//   }
-// }
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shopywell/app/core/utils/easy_loader.dart';
 import 'package:shopywell/app/core/utils/toasts.dart';
 import 'package:shopywell/app/data/service/auth_service.dart';
@@ -72,13 +25,11 @@ class LoginController extends GetxController {
   }
 
   Future<void> login() async {
-    // final email = emailController.text.trim();
-    // final password = passwordController.text;
-    final email = 'testuser@gmail.com';
-    final password = 'Test123!';
-    // if (!formKey.currentState!.validate()) {
-    //   return;
-    // }
+    final email = emailController.text.trim();
+    final password = passwordController.text;
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
     try {
       LoadingUtil.showLoading();
       final result = await _authService.signIn(email, password);
@@ -90,6 +41,51 @@ class LoginController extends GetxController {
       Toasts.showError(e.toString());
     } finally {
       EasyLoading.dismiss();
+    }
+  }
+
+  Future<dynamic> signInWithGoogle() async {
+    LoadingUtil.showLoading('Signing in with Google...');
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: ['email', 'https://www.googleapis.com/auth/userinfo.profile'],
+      );
+
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+      if (googleUser == null) {
+        // User cancelled the sign-in
+        return false;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final userCredential = await FirebaseAuth.instance.signInWithCredential(
+        credential,
+      );
+
+      // Process Google sign-in through AuthService
+      final result = await _authService.signInWithGoogle(userCredential);
+
+      if (result != null) {
+        // Load user data into UserService
+        await _userService.loadUsers();
+        return result;
+      }
+
+      return false;
+    } catch (e) {
+      Toasts.showError('Error during Google Sign-In $e');
+      log('Error during Google Sign-In: $e');
+      return false;
+    } finally {
+      LoadingUtil.dismiss();
     }
   }
 

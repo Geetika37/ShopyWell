@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:shopywell/app/core/constants/app_color.dart';
+import 'package:shopywell/app/core/constants/app_images.dart';
 import 'package:shopywell/app/core/widgets/custom_button.dart';
 import 'package:shopywell/app/routes/app_pages.dart';
 
@@ -28,173 +30,37 @@ class LoginView extends GetView<LoginController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 80),
+
                     // Welcome Back Title
-                    const Text(
-                      'Welcome\nBack!',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        height: 1.2,
-                      ),
-                    ),
+                    _buildHeading(),
                     const SizedBox(height: 40),
 
                     // Username/Email Field
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: TextField(
-                        controller: controller.emailController,
-                        decoration: const InputDecoration(
-                          hintText: 'Username or Email',
-                          prefixIcon: Icon(
-                            Icons.person_outline,
-                            color: Colors.grey,
-                          ),
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 16,
-                          ),
-                        ),
-                      ),
-                    ),
+                    _buildUserName(),
                     const SizedBox(height: 16),
 
                     // Password Field
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.blue, width: 1),
-                      ),
-                      child: Obx(
-                        () => TextField(
-                          controller: controller.passwordController,
-                          obscureText: !controller.isPasswordVisible.value,
-                          decoration: InputDecoration(
-                            hintText: 'Password',
-                            prefixIcon: const Icon(
-                              Icons.lock_outline,
-                              color: Colors.grey,
-                            ),
-                            suffixIcon: GestureDetector(
-                              onTap: controller.togglePasswordVisibility,
-                              child: Icon(
-                                controller.isPasswordVisible.value
-                                    ? Icons.visibility_outlined
-                                    : Icons.visibility_off_outlined,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    _buildPassword(),
 
                     // Forgot Password
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {},
-                        child: const Text(
-                          'Forgot Password?',
-                          style: TextStyle(color: Colors.red, fontSize: 14),
-                        ),
-                      ),
-                    ),
+                    _buildForgotPassword(),
                     const SizedBox(height: 20),
 
                     // Login Button
-                    // SizedBox(
-                    //   width: double.infinity,
-                    //   height: 52,
-                    //   child: ElevatedButton(
-                    //     onPressed: controller.login,
-                    //     style: ElevatedButton.styleFrom(
-                    //       backgroundColor: Colors.red,
-                    //       shape: RoundedRectangleBorder(
-                    //         borderRadius: BorderRadius.circular(12),
-                    //       ),
-                    //       elevation: 0,
-                    //     ),
-                    //     child: const Text(
-                    //       'Login',
-                    //       style: TextStyle(
-                    //         color: Colors.white,
-                    //         fontSize: 16,
-                    //         fontWeight: FontWeight.w600,
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                    CustomButton(
-                      text: 'Login',
-                      onPressed: () {
-                        controller.login();
-                        // Get.offAllNamed(Routes.HOME);
-                      },
-                      buttoncolor: AppColors.primaryColor,
-                      textcolor: AppColors.black,
-                    ),
+                    _buildLogin(),
                     // Flexible space instead of Spacer for scrollable content
                     const SizedBox(height: 40),
 
                     // OR Continue with
-                    const Center(
-                      child: Text(
-                        '- OR Continue with -',
-                        style: TextStyle(color: Colors.grey, fontSize: 14),
-                      ),
-                    ),
+                    _buildContinueWith(),
                     const SizedBox(height: 20),
 
                     // Social Login Buttons
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _socialButton(Icons.g_mobiledata, Colors.red),
-                        const SizedBox(width: 20),
-                        _socialButton(Icons.apple, Colors.black),
-                        const SizedBox(width: 20),
-                        _socialButton(Icons.facebook, Colors.blue),
-                      ],
-                    ),
+                    _buildButtons(),
                     const SizedBox(height: 30),
 
                     // Create Account
-                    Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'Create An Account ',
-                            style: TextStyle(color: Colors.grey, fontSize: 14),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Get.toNamed(Routes.SIGNUP);
-                            },
-                            child: const Text(
-                              'Sign Up',
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    _buildCreateAccount(),
                     const SizedBox(height: 40),
                   ],
                 ),
@@ -206,7 +72,162 @@ class LoginView extends GetView<LoginController> {
     );
   }
 
-  Widget _socialButton(IconData icon, Color color) {
+  Center _buildCreateAccount() {
+    return Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            'Create An Account ',
+            style: TextStyle(color: AppColors.lightGreyColor, fontSize: 14),
+          ),
+          GestureDetector(
+            onTap: () {
+              Get.toNamed(Routes.SIGNUP);
+            },
+            child: const Text(
+              'Sign Up',
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Row _buildButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        InkWell(
+          onTap: () async {
+            final result = await controller.signInWithGoogle();
+            if (result != null) {
+              Get.offAllNamed(Routes.HOME);
+            }
+          },
+          child: _socialButton(Appimages.googleSign),
+        ),
+        const SizedBox(width: 20),
+        _socialButton(Appimages.apple),
+        const SizedBox(width: 20),
+        _socialButton(Appimages.facebook),
+      ],
+    );
+  }
+
+  Center _buildContinueWith() {
+    return Center(
+      child: Text(
+        '- OR Continue with -',
+        style: TextStyle(color: AppColors.lightGreyColor, fontSize: 14),
+      ),
+    );
+  }
+
+  CustomButton _buildLogin() {
+    return CustomButton(
+      text: 'Login',
+      onPressed: () {
+        controller.login();
+        // Get.offAllNamed(Routes.HOME);
+      },
+      buttoncolor: AppColors.primaryColor,
+      textcolor: AppColors.white,
+      radius: 4,
+    );
+  }
+
+  Text _buildHeading() {
+    return const Text(
+      'Welcome\nBack!',
+      style: TextStyle(
+        fontSize: 36,
+        fontWeight: FontWeight.w700,
+        color: Colors.black,
+        height: 1.2,
+      ),
+    );
+  }
+
+  Align _buildForgotPassword() {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: TextButton(
+        onPressed: () {},
+        child: const Text(
+          'Forgot Password?',
+          style: TextStyle(color: Colors.red, fontSize: 14),
+        ),
+      ),
+    );
+  }
+
+  Container _buildPassword() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Obx(
+        () => TextField(
+          controller: controller.passwordController,
+          obscureText: !controller.isPasswordVisible.value,
+          decoration: InputDecoration(
+            hintText: 'Password',
+            prefixIcon: const Icon(
+              RemixIcons.lock_fill,
+              color: AppColors.lightGreyColor,
+            ),
+            suffixIcon: GestureDetector(
+              onTap: controller.togglePasswordVisibility,
+              child: Icon(
+                controller.isPasswordVisible.value
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined,
+                color: AppColors.lightGreyColor,
+              ),
+            ),
+            border: InputBorder.none,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 16,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container _buildUserName() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: TextField(
+        controller: controller.emailController,
+        decoration: InputDecoration(
+          hintText: 'Username or Email',
+          prefixIcon: Icon(
+            RemixIcons.user_fill,
+            color: AppColors.lightGreyColor,
+          ),
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 16,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _socialButton(String icon) {
     return Container(
       width: 50,
       height: 50,
@@ -214,7 +235,10 @@ class LoginView extends GetView<LoginController> {
         shape: BoxShape.circle,
         border: Border.all(color: Colors.red, width: 1),
       ),
-      child: Icon(icon, color: color, size: 24),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: SvgPicture.asset(icon, fit: BoxFit.contain),
+      ),
     );
   }
 }

@@ -13,6 +13,11 @@ class Appimages {
   static const bottombar4 = 'assets/svg/bottombar4.svg';
   static const bottombar5 = 'assets/svg/bottombar5.svg';
 
+  /// login
+  static const googleSign = 'assets/svg/google.svg';
+  static const apple = 'assets/svg/apple.svg';
+  static const facebook = 'assets/svg/facebook.svg';
+
   /// home
   static const homeMenu = 'assets/svg/menuicon.svg';
 }

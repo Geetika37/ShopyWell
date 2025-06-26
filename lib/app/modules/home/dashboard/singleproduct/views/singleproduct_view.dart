@@ -14,68 +14,75 @@ class SingleproductView extends GetView<SingleproductController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          onPressed: controller.goBack,
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.shopping_cart_outlined, color: Colors.black),
-          ),
-        ],
-      ),
+      appBar: _buildAppbar(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Product Image Section
             _buildImageSection(),
-
             const Gap(20),
 
             // Product Details Section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Size Selection
-                  _buildSizeSelection(),
-
-                  const Gap(20),
-
-                  // Product Name and Description
-                  _buildProductInfo(),
-
-                  const Gap(10),
-
-                  // Rating and Reviews
-                  _buildRatingSection(),
-
-                  const Gap(15),
-
-                  // Price Section
-                  _buildPriceSection(),
-
-                  const Gap(20),
-
-                  // Product Description
-                  _buildProductDescription(),
-
-                  const Gap(30),
-
-                  // Quantity and Action Buttons
-                  _buildActionSection(),
-                ],
-              ),
-            ),
+            _buildProdutDetails(),
           ],
         ),
       ),
+    );
+  }
+
+  Padding _buildProdutDetails() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Size Selection
+          _buildSizeSelection(),
+
+          const Gap(20),
+
+          // Product Name and Description
+          _buildProductInfo(),
+
+          const Gap(10),
+
+          // Rating and Reviews
+          _buildRatingSection(),
+
+          const Gap(15),
+
+          // Price Section
+          _buildPriceSection(),
+
+          const Gap(20),
+
+          // Product Description
+          _buildProductDescription(),
+
+          const Gap(30),
+
+          // Quantity and Action Buttons
+          _buildActionSection(),
+        ],
+      ),
+    );
+  }
+
+  AppBar _buildAppbar() {
+    return AppBar(
+      backgroundColor: Colors.white,
+      elevation: 0,
+      leading: IconButton(
+        onPressed: controller.goBack,
+        icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+      ),
+      actions: [
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.shopping_cart_outlined, color: Colors.black),
+        ),
+      ],
     );
   }
 

@@ -12,7 +12,20 @@
           "package_name": "com.example.shopywell"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "795063806625-885t5he096pu051kkfgn07k6lotq2nsb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.shopywell",
+            "certificate_hash": "312685ece6cd9d57461af263582695fb9ea72cb7"
+          }
+        },
+        {
+          "client_id": "795063806625-1opdeuksnj49m0pjfovvc4ug2buj5uj5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDq9l1E6HxZJ3znC9-AD18DsE0pZ67YLso"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "795063806625-1opdeuksnj49m0pjfovvc4ug2buj5uj5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "795063806625-tdsro88jlrhhpk56h9hqmbovok8rk9gv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.shopywell"
+              }
+            }
+          ]
         }
       }
     }

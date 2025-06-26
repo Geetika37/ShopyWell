@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-
 import 'package:get/get.dart';
 import 'package:shopywell/app/core/constants/app_theme.dart';
 import 'package:shopywell/app/data/service/auth_service.dart';

@@ -121,4 +121,39 @@ class AuthService extends GetxService {
       return null;
     }
   }
+
+  Future<UserCredential?> signInWithGoogle(UserCredential credential) async {
+    try {
+      if (credential.user != null) {
+        // Check if user document exists
+        final doc =
+            await _firestore
+                .collection('users')
+                .doc(credential.user!.uid)
+                .get();
+
+        if (!doc.exists) {
+          // Create user document for first-time Google sign-in
+          final userModel = UserModel(
+            uid: credential.user!.uid,
+            email: credential.user!.email!,
+            createdAt: DateTime.now(),
+          );
+
+          await createUserDocument(userModel, credential.user!.uid);
+        }
+
+        // Update the observable user model
+        userModel.value = UserModel.fromJson(
+          (await _firestore.collection('users').doc(credential.user!.uid).get())
+              .data()!,
+        );
+      }
+
+      return credential;
+    } catch (e) {
+      Toasts.showError('Error processing Google Sign-In: ${e.toString()}');
+      return null;
+    }
+  }
 }
