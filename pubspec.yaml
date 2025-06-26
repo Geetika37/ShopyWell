@@ -17,14 +17,17 @@ dependencies:
   firebase_messaging: ^15.2.7
   flutter:
     sdk: flutter
+  flutter_dotenv: ^5.2.1
   flutter_easyloading: ^3.0.5
   flutter_launcher_icons: ^0.14.4
   flutter_spinkit: ^5.2.1
+  flutter_stripe: ^11.5.0
   flutter_svg: ^2.2.0
   gap: ^3.0.1
   get: ^4.7.2
   google_fonts: ^6.2.1
   google_sign_in: ^6.2.1
+  http: ^1.4.0
   remixicon: ^1.4.1
   shared_preferences: ^2.5.3
   smooth_page_indicator: ^1.2.1
@@ -41,3 +44,18 @@ flutter:
   assets:
     - assets/img/
     - assets/svg/
+    - .env
+
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  remove_alpha_ios: true
+  ios: true
+  image_path: "assets/img/Splash Screen.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/img/Splash Screen.png"
+  web:
+    generate: true
+    image_path: "assets/img/Splash Screen.png"
+    background_color: "#ffffff"
+    theme_color: "#ffffff"

@@ -1,7 +1,20 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:shopywell/app/core/utils/easy_loader.dart';
+import 'package:shopywell/app/core/utils/toasts.dart';
+import 'package:shopywell/app/data/service/stripe_payment_service.dart';
+import 'package:shopywell/app/routes/app_pages.dart';
 
 class SingleproductController extends GetxController {
+  final StripePaymentService stripePaymentService =
+      Get.find<StripePaymentService>();
+  final String _stripePublishableKey =
+      dotenv.env['STRIPE_PUBLISHABLE_KEY'] ?? '';
+  final String _stripeSecretKey = dotenv.env['STRIPE_SECRET_KEY'] ?? '';
+
   // Product details
   final productName = 'Nike Sneakers'.obs;
   final productDescription = 'Vision Alta Men\'s Shoe Size (All Colours)'.obs;
@@ -79,18 +92,29 @@ class SingleproductController extends GetxController {
     );
   }
 
-  void buyNow() async {
-    isBuyingNow.value = true;
-    // Simulate API call
-    await Future.delayed(const Duration(seconds: 1));
-    isBuyingNow.value = false;
-    Get.snackbar(
-      'Success',
-      'Proceeding to checkout!',
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.blue,
-      colorText: Colors.white,
-    );
+  Future<void> buyNow() async {
+    LoadingUtil.showLoading('Initiating payment ...');
+    try {
+      final bool isSuccessStripe = await stripePaymentService.startPayment(
+        amount: '1000',
+        currency: 'INR',
+        stripeSecretKey: _stripeSecretKey,
+        stripePublishableKey: _stripePublishableKey,
+        description: 'Payment for Shopywell order',
+        customerName: 'Shopywell',
+      );
+      if (isSuccessStripe) {
+        Toasts.showSuccess('Order placed successfully!');
+        Get.offAllNamed(Routes.HOME);
+      } else {
+        Toasts.showError('Payment failed. Please try again.');
+      }
+    } catch (e) {
+      Toasts.showError('An error occurred: $e');
+      log('Error during payment: $e');
+    } finally {
+      LoadingUtil.dismiss();
+    }
   }
 
   void goBack() {

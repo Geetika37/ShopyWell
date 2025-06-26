@@ -7,7 +7,7 @@ import 'package:shopywell/app/data/service/auth_service.dart';
 import 'package:shopywell/app/data/service/user_service.dart';
 import 'package:shopywell/app/modules/splash/bindings/splash_binding.dart';
 import 'package:shopywell/firebase_options.dart';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'app/routes/app_pages.dart';
 
 void main() async {
@@ -15,6 +15,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await Get.putAsync(() async => AuthService());
   await Get.putAsync(() async => UserService());
+  await dotenv.load(fileName: ".env");
   runApp(
     GetMaterialApp(
       debugShowCheckedModeBanner: false,
