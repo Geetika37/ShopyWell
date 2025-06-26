@@ -16,6 +16,7 @@ void main() async {
   await Get.putAsync(() async => AuthService());
   await Get.putAsync(() async => UserService());
   await dotenv.load(fileName: ".env");
+
   runApp(
     GetMaterialApp(
       debugShowCheckedModeBanner: false,
